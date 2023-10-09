@@ -1,0 +1,103 @@
+﻿.ms-bg-pizza {
+    background-image: url("../img/PizzaBg.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.table {
+    table-layout: fixed;
+    width: 100%;
+}
+
+.ms-table-preview{
+    height: 5rem;
+    width: 5rem;
+    object-fit:cover;
+}
+
+#ms-logo{
+    height: 5rem;
+}
+
+header{
+    height: 6.5rem;
+}
+
+main{
+    min-height: Calc(100vh - 14rem);
+}
+
+footere{
+    height: 7.5rem;
+}
+
+.ms-card-img{
+    height: 15rem;
+    object-fit: cover;
+}
+
+.ms-bg-orange{
+    background-color: var(--bs-orange);
+}
+
+.ms-text-orange {
+    color: var(--bs-orange);
+}
+
+#ms-jumbo{
+    height: 30rem;
+}
+
+.ms-w-80{
+    width: 80%;
+}
+
+.ms-rounded-btn{
+    border-radius: 25rem;
+}
+
+.ms-about-us{
+    height: 25rem;
+    width: 70%;
+    margin:auto;
+}
+
+.ms-w-40{
+    width: 40%;
+}
+
+.ms-graphic-span{
+    z-index: 1;
+    width: 50%;
+    position: absolute;
+}
+
+.ms-graphic-span-right{
+    height: 50%;
+    top: 20%;
+    right: 0;
+}
+
+.ms-graphic-span-left {
+    height: 35%;
+    bottom: 20%;
+    left: 0;
+}
+
+.ms-index-2{
+    z-index: 2;
+}
+
+.ms-border-orange {
+    border-color: var(--bs-orange);
+}
+
+.ms-detail-image{
+    height: 20rem;
+    object-fit: cover;
+}
+
+.ms-modal-img {
+    width: 100%;
+    object-fit: cover;
+}

@@ -1,0 +1,115 @@
+﻿@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Admin";
+}
+
+@model List<Pizza>
+
+<div class="p-5">
+    <div class="bg-light p-3 rounded-3">
+        <h1 class="text-center mb-3">Lista delle pizze</h1>
+        @if (User.IsInRole("ADMIN"))
+        {
+            <div class="text-center">
+                <a class="btn btn-success my-3" href="@Url.Action("Create", "Pizza")">Aggiungi pizza</a>
+            </div>     
+        }
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Anteprima</th>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Descrizione</th>
+                    <th scope="col">Prezzo</th>
+                    <th scope="col">Azioni</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if(Model.Count > 0)
+                {
+                    @foreach (Pizza pizza in Model)
+                    {
+                        <tr>
+                            <td>
+                                <img class="ms-table-preview" src="@pizza.UrlImage" alt="@pizza.Name">
+                            </td>
+                            <td class="text-truncate">@pizza.Name</td>
+                            <td class="text-truncate">@pizza.Description</td>
+                            <td class="text-truncate">@pizza.Price€</td>
+                            <td>
+                                <a class="btn btn-sm btn-primary" href="@Url.Action("Details", "Pizza", new { id = pizza.Id})">
+                                @* Dettaglio *@
+                                    <i class="fa-solid fa-circle-info"></i>
+                                </a>
+                                @if (User.IsInRole("ADMIN"))
+                                {
+                                    <a class="btn btn-sm btn-warning" href="@Url.Action("Update", "Pizza", new { id = pizza.Id})">
+                                    @* Modifica *@
+                                        <i class="fa-solid fa-pen text-white"></i>
+                                    </a>
+                                    <form class="d-inline-block" id="ms-delete-@pizza.Id" asp-controller="Pizza" asp-action="Delete" asp-route-id="@pizza.Id" method="post">
+                                        @Html.AntiForgeryToken()
+                                        <button data-bs-toggle="modal" data-bs-target="#ms-modal-delete" data-form-id="@pizza.Id" data-form-name="@pizza.Name" type="submit" class="btn btn-sm btn-danger ms-btn-delete">
+                                        @* Elimina *@
+                                            <i class="fa-solid fa-trash-can"></i>
+                                        </button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                } else
+                {
+                    <tr>
+                        <td class="text-center text-danger" colspan="5">Il menù è ancora vuoto.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="ms-modal-delete" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div id="ms-modal-content" class="modal-content">
+            <div class="modal - header">
+                <h5 class="modal-title text-danger">Attenzione!</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h2 class="p-5 text-center">Vuoi davvero eliminare la pizza <span class="ms-deleting-name"></span>?</h2>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal"> No </button>
+                <button id="ms-modal-delete-btn" type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal"> Elimina </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const btnDelete = document.getElementsByClassName("ms-btn-delete");
+    const myModal = document.getElementById("ms-modal-delete");
+    const pizzaModalName = document.querySelector(".ms-deleting-name");
+    const modalDeleteBtn = document.getElementById("ms-modal-delete-btn");
+    let pizzaId = null;
+
+    modalDeleteBtn.addEventListener("click", function (event) {
+        if(pizzaId != null){
+            const deletingForm = document.getElementById("ms-delete-" + pizzaId);
+            deletingForm.submit();
+            pizzaId = null
+        }
+    });
+
+    for (let i = 0; i < btnDelete.length; i++) {
+        btnDelete[i].addEventListener("click", function (event) {
+            event.preventDefault();
+            pizzaModalName.innerHTML = "";
+            pizzaId = btnDelete[i].getAttribute("data-form-id");
+            const pizzaName = btnDelete[i].getAttribute("data-form-name");
+            pizzaModalName.innerHTML = pizzaName;
+        });
+    }
+
+</script>

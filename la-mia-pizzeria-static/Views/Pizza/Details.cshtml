@@ -1,0 +1,62 @@
+﻿@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Admin";
+}
+
+@model Pizza
+
+<div class="p-5">
+    <div class="bg-light p-3 rounded-3">
+        <img class="ms-detail-image m-auto d-block rounded-3" src="@Model.UrlImage" alt="@Model.Name">
+        <ul class="list-unstyled">
+            <li>
+                <h1 class="text-center mb-3">@Model.Name</h1>
+            </li>
+            <li>
+                
+                <p>
+                    <strong>Categoria: </strong>@if (Model.Category != null)
+                    {
+                        <span>@Model.Category.Name</span>
+                    } else
+                    {
+                        <span>Nessuna categoria associata.</span>
+                    }
+                </p>
+            </li>
+            <li>
+                <p>
+                    <strong>Ingredienti: </strong>@if (Model.Ingredients != null && Model.Ingredients.Count > 0)
+                    {
+                        @foreach(Ingredient ingredient in Model.Ingredients)
+                        {
+                            @if (!(ingredient == Model.Ingredients.Last()))
+                            {
+                                <span>@ingredient.Name, </span>
+                            }
+                            else
+                            {
+                                <span>@ingredient.Name</span>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        <span>Nessun ingrediente associato.</span>
+                    }
+                </p>
+            </li>
+            <li>
+                <p>
+                    <strong>Informazioni: </strong>@Model.Description
+                </p>
+            </li>
+            <li>
+                <b>Prezzo: @Model.Price€</b>
+            </li>
+        </ul>
+        <div class="text-center">
+            <a class="btn btn-warning" href="@Url.Action("Index", "Home")">Lista pizze</a>
+        </div>
+    </div>
+</div>

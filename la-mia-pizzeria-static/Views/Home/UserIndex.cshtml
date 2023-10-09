@@ -1,0 +1,32 @@
+﻿@{
+    Layout = "_LayoutHome";
+    ViewData["Title"] = "Home";
+}
+
+<div id="ms-jumbo" class="d-flex">
+    <div class="container w-50 h-100 ms-bg-orange text-white d-flex align-items-center justify-content-end">
+        <div class="ms-w-80 p-5">
+            <h1>Vieni a provare la nostra PIZZA!!</h1>
+            <p class="fs-5">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga repudiandae minus quasi facere molestiae in eum, at excepturi! Et ipsam voluptatem reiciendis. Eveniet, sint sed tenetur voluptas fuga impedit debitis alias est laudantium possimus.</p>
+            <a class="btn btn-outline-light ms-rounded-btn px-5 py-3" href="@Url.Action("Menu", "Pizza")">Menù</a>
+        </div>
+    </div>
+    <div class="w-50 h-100">
+        <img class="h-100 w-100" src="~/img/jumbo-pizza.jpg" alt="Pizza" />
+    </div>
+</div>
+
+<div class="text-center py-5 bg-secondary position-relative">
+    <div class="ms-about-us d-flex justify-content-center position-relative">
+        <div class="ms-w-40 ms-index-2">
+            <img class="h-100 w-100" src="~/img/impasto-pizza.jpg" alt="Pizza" />
+        </div>
+        <div class="ms-w-40 d-flex flex-column justify-content-center text-start p-3 bg-white ms-index-2">
+            <h2>Chi siamo</h2>
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga repudiandae minus quasi facere molestiae in eum, at excepturi! Et ipsam voluptatem reiciendis. Eveniet, sint sed tenetur voluptas fuga impedit debitis alias est laudantium possimus.</p>
+            <a class="btn btn-outline-dark ms-rounded-btn px-5 py-3 align-self-start ms-border-orange" href="#"><b>SCOPRI DI PIÙ</b></a>
+        </div>
+        <span class="ms-graphic-span ms-graphic-span-right ms-bg-orange"></span>
+        <span class="ms-graphic-span ms-graphic-span-left ms-bg-orange"></span>
+    </div>
+</div>
