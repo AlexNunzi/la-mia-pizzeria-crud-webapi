@@ -1,7 +1,9 @@
 ﻿using la_mia_pizzeria_static.Database;
+using la_mia_pizzeria_static.Migrations;
 using la_mia_pizzeria_static.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace la_mia_pizzeria_static.Controllers.Api
 {
@@ -90,6 +92,73 @@ namespace la_mia_pizzeria_static.Controllers.Api
                 _pizzaDatabase.Add(newPizzaModel.Pizza);
                 _pizzaDatabase.SaveChanges();
                 return Ok();
+            } catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdatePizza(long id, [FromBody] PizzaFormModel newPizzaModel)
+        {
+            try
+            {
+                Pizza? updatingPizza = _pizzaDatabase.Pizza.Where(p => p.Id == id).Include(pizza => pizza.Ingredients).FirstOrDefault();
+                if(updatingPizza != null)
+                {
+                    if (newPizzaModel.Pizza.UrlImage == null)
+                    {
+                        newPizzaModel.Pizza.UrlImage = "/img/pizza_placeholder.png";
+                    }
+                    updatingPizza.Name = newPizzaModel.Pizza.Name;
+                    updatingPizza.Description = newPizzaModel.Pizza.Description;
+                    updatingPizza.UrlImage = newPizzaModel.Pizza.UrlImage;
+                    updatingPizza.Price = newPizzaModel.Pizza.Price;
+                    updatingPizza.CategoryId = newPizzaModel.Pizza.CategoryId;
+                    updatingPizza.Ingredients?.Clear();
+                    if (newPizzaModel.SelectedIngredients != null)
+                    {
+                        updatingPizza.Ingredients = new List<Ingredient>();
+                        foreach (String ingredientId in newPizzaModel.SelectedIngredients)
+                        {
+                            long parsedIngredientId = long.Parse(ingredientId);
+
+                            Ingredient? dbIngredient = _pizzaDatabase.Ingredients.Where(i => i.Id == parsedIngredientId).FirstOrDefault();
+
+                            if (dbIngredient != null)
+                            {
+                                updatingPizza.Ingredients.Add(dbIngredient);
+                            }
+                        }
+                    }
+                    _pizzaDatabase.SaveChanges();
+                    return Ok();
+                } else
+                {
+                    return BadRequest();
+                }
+            } catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeletePizzaById(long id)
+        {
+            try
+            {
+                Pizza deletingPizza = _pizzaDatabase.Pizza.Find(id);
+                if(deletingPizza != null)
+                {
+                    _pizzaDatabase.Remove(deletingPizza);
+                    _pizzaDatabase.SaveChanges();
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
             } catch (Exception ex)
             {
                 return BadRequest(ex.Message);

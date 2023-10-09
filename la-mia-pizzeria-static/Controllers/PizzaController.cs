@@ -253,7 +253,7 @@ namespace la_mia_pizzeria_static.Controllers
                     previousPizza.CategoryId = updatedPizzaModel.Pizza.CategoryId;
                 }
 
-                previousPizza.Ingredients.Clear();
+                previousPizza.Ingredients?.Clear();
 
                 if (updatedPizzaModel.SelectedIngredients != null)
                 {
