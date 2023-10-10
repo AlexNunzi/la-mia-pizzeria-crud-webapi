@@ -3,6 +3,7 @@ using la_mia_pizzeria_static.Database;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
+using System.Text.Json.Serialization;
 
 namespace la_mia_pizzeria_static
 {
@@ -26,6 +27,11 @@ namespace la_mia_pizzeria_static
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            // Codice di cofigurazione per il serializzatore JSON, in modo che ignori completamente le dipendenze cicliche di
+            // eventuali relazione N:N o 1:N presenti nel JSON risultante.
+            builder.Services.AddControllers().AddJsonOptions(x =>
+                            x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
             builder.Services.AddScoped<ICustomLogger, CustomFileLogger>();
             builder.Services.AddScoped<DbPizzeriaContext, DbPizzeriaContext>();

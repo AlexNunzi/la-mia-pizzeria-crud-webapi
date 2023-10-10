@@ -21,7 +21,7 @@ namespace la_mia_pizzeria_static.Controllers.Api
         [HttpGet]
         public IActionResult GetPizzas()
         {
-            List<Pizza> allPizza = _pizzaDatabase.Pizza.ToList();
+            List<Pizza> allPizza = _pizzaDatabase.Pizza.Include(p => p.Ingredients).Include(p => p.Category).ToList();
             if(allPizza != null && allPizza.Count > 0)
             {
                 return Ok(allPizza);
@@ -36,7 +36,7 @@ namespace la_mia_pizzeria_static.Controllers.Api
         {
             if(searchingName != null && searchingName.Trim().Length > 0) 
             {
-                List<Pizza> allPizza = _pizzaDatabase.Pizza.Where(p => p.Name.ToLower().Contains(searchingName.Trim().ToLower())).ToList();
+                List<Pizza> allPizza = _pizzaDatabase.Pizza.Where(p => p.Name.ToLower().Contains(searchingName.Trim().ToLower())).Include(p => p.Ingredients).Include(p => p.Category).ToList();
                 if (allPizza != null && allPizza.Count > 0)
                 {
                     return Ok(allPizza);
@@ -54,7 +54,7 @@ namespace la_mia_pizzeria_static.Controllers.Api
         [HttpGet("{id}")]
         public IActionResult GetPizzaById(long id)
         {
-            Pizza? foundPizza = _pizzaDatabase.Pizza.Find(id);
+            Pizza? foundPizza = _pizzaDatabase.Pizza.Include(p => p.Ingredients).Include(p => p.Category).Where(p => p.Id == id).FirstOrDefault();
             if (foundPizza != null)
             {
                 return Ok(foundPizza);
