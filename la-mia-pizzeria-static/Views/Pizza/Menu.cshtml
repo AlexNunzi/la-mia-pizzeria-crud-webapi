@@ -46,29 +46,30 @@
     </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js" integrity="sha512-emSwuKiMyYedRwflbZB2ghzX8Cw8fmNVgZ6yQNNXXagFzFOaQmbvQ1vmDkddHjm5AITcBIZfC7k4ShQSjgPAmQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+@section Scripts {
 
-<script>
-    const btnDetail = document.getElementsByClassName("ms-pizza-card-detail");
-    const myModalContent = document.getElementById("ms-modal-content");
+    <script type="text/javascript">
+        const btnDetail = document.getElementsByClassName("ms-pizza-card-detail");
+        const myModalContent = document.getElementById("ms-modal-content");
 
-    for (let i = 0; i < btnDetail.length; i++) {
-        btnDetail[i].addEventListener("click", function (event) {
-            myModalContent.innerHTML = `<div class="modal-body">
-                                            <h2 class="p-5 text-center">Caricamento...</h2>
-                                        </div>
-                                        <div class="modal-footer">
-                                                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal"> Chiudi </button>
-                                        </div>`;
-            const path = btnDetail[i].getAttribute("data-path");
-            axios.get(path)
-                .then(function (response) {
-                    myModalContent.innerHTML = response.data;
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        });
-    }
+        for (let i = 0; i < btnDetail.length; i++) {
+            btnDetail[i].addEventListener("click", function (event) {
+                myModalContent.innerHTML = `<div class="modal-body">
+                                                <h2 class="p-5 text-center">Caricamento...</h2>
+                                            </div>
+                                            <div class="modal-footer">
+                                                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal"> Chiudi </button>
+                                            </div>`;
+                const path = btnDetail[i].getAttribute("data-path");
+                axios.get(path)
+                    .then(function (response) {
+                        myModalContent.innerHTML = response.data;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            });
+        }
 
-</script>
+    </script>
+}

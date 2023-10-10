@@ -31,8 +31,8 @@ namespace la_mia_pizzeria_static.Controllers.Api
             }
         }
 
-        [HttpGet("{searchingName}")]
-        public IActionResult GetPizzas(string searchingName)
+        [HttpGet]
+        public IActionResult SearchPizzas(string? searchingName)
         {
             if(searchingName != null && searchingName.Trim().Length > 0) 
             {
@@ -43,11 +43,11 @@ namespace la_mia_pizzeria_static.Controllers.Api
                 }
                 else
                 {
-                    return NotFound();
+                    return GetPizzas();
                 }
             } else
             {
-                return BadRequest();
+                return GetPizzas();
             }
         }
 
