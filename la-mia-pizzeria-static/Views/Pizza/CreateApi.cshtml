@@ -1,0 +1,139 @@
+﻿@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Create new pizza";
+}
+
+<div class="p-5">
+    <div class="container bg-light p-3 rounded-3">
+        <h1 class="ms-text-orange text-center">Crea la tua nuova pizza!</h1>
+        <p class="fs-6 text-center">I campi contrassegnati da * sono obbligatori.</p>
+        <form method="post" action="">
+            <div class="mb-3">
+                <label for="name" class="form-label">Nome *</label>
+                <input type="text" class="form-control" id="name">
+                <span class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Descrizione *</label>
+                <input type="text" class="form-control" id="description">
+                <span class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label for="imgUrl" class="form-label">URL immagine</label>
+                <input type="text" class="form-control" id="imgUrl">
+                <span class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label for="price" class="form-label">Prezzo (es. 5,5) *</label>
+                <input type="number" step="0.1" class="form-control" id="price">
+                <span class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <div id="ms-crt-category-load" class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <select id="ms-crt-categories-select" class="d-none">
+                </select>
+            </div>
+            <div class="mb-3">
+                <div id="ms-crt-ingredient-load" class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <select id="ms-crt-ingredients-select" class="d-none form-control mb-2 me-sm-2 ms-sm-3 leftList d-block" multiple="multiple" size="10">
+                </select>
+            </div>
+            <button id="ms-crt-send-btn" type="submit" class="btn btn-primary">Crea</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script type="text/javascript">
+        categoriesSelect = document.getElementById("ms-crt-categories-select");
+        ingredientsSelect = document.getElementById("ms-crt-ingredients-select");
+        categoryLoad = document.getElementById("ms-crt-category-load");
+        ingredientsLoad = document.getElementById("ms-crt-ingredient-load");
+        sendButton = document.getElementById("ms-crt-send-btn");
+
+        sendButton.addEventListener("click", (event) => {
+            event.preventDefault();
+            let ingredientsOptions = ingredientsSelect.options;
+            let selectedIngredients = [];
+            const category = categoriesSelect.value;
+
+            const pizzaName = document.getElementById("name").value;
+            const pizzaPrice = document.getElementById("price").value;
+            const pizzaDescription = document.getElementById("description").value;
+            const pizzaImgUrl = document.getElementById("imgUrl").value;
+
+            for (let i = 0; i < ingredientsOptions.length; i++) {
+                if (ingredientsOptions[i].selected == true) {
+                    selectedIngredients.push(ingredientsOptions[i].value);
+                }
+            }
+
+            axios.post("/api/Pizzas/CreatePizza", {
+                "Pizza": {
+                    "Name": pizzaName,
+                    "Price": Number(pizzaPrice),
+                    "Description": pizzaDescription,
+                    "UrlImage": pizzaImgUrl ? pizzaImgUrl : null,
+                    "CategoryId": category ? Number(category) : null
+                },
+                "SelectedIngredients": selectedIngredients
+            }).then(function (response) {
+                const url = '@Url.Action("MenuApi", "Pizza")';
+                window.location.href = url;
+            }).catch(function (error) {
+                console.log(error);
+            });
+        });
+
+        axios.get("/api/Pizzas/GetCategoriesList")
+            .then(function (response) {
+                categoriesSelect.innerHTML = "";
+                console.log(response);
+                if (response.data.length > 0) {
+                    categoriesSelect.innerHTML += `<option value="">Categorie</option>`;
+                    response.data.forEach(category => {
+                        categoriesSelect.innerHTML += `<option value="${category.id}">${category.name}</option>`;
+                    });
+                } else {
+                    categoriesSelect.innerHTML += `<option value="">Nessuna categoria disponibile</option>`;
+                }
+                categoriesSelect.classList.remove("d-none");
+                categoryLoad.classList.add("d-none");
+            })
+            .catch(function (error) {
+                categoriesSelect.innerHTML = "";
+                categoriesSelect.innerHTML += `<option value="">Errore durante il caricamento</option>`;
+                categoriesSelect.classList.remove("d-none");
+                categoryLoad.classList.add("d-none");
+                console.log(error);
+            });
+
+        axios.get("/api/Pizzas/GetIngredientsList")
+            .then(function (response) {
+                ingredientsSelect.innerHTML = "";
+                console.log(response);
+                if (response.data.length > 0) {
+                    response.data.forEach(ingredient => {
+                        ingredientsSelect.innerHTML += `<option value="${ingredient.id}">${ingredient.name}</option>`;
+                    });
+                } else {
+                    categoriesSelect.innerHTML += `<option value="">Nessun ingrediente disponibile</option>`;
+                }
+                ingredientsSelect.classList.remove("d-none");
+                ingredientsLoad.classList.add("d-none");
+            })
+            .catch(function (error) {
+                categoriesSelect.innerHTML = "";
+                categoriesSelect.innerHTML += `<option value="">Errore durante il caricamento</option>`;
+                ingredientsSelect.classList.remove("d-none");
+                ingredientsLoad.classList.add("d-none");
+                console.log(error);
+            });
+    </script>
+
+}

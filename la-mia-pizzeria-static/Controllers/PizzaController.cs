@@ -315,6 +315,12 @@ namespace la_mia_pizzeria_static.Controllers
         }
 
         [HttpGet]
+        public IActionResult CreateApi()
+        {
+            return View("CreateApi", "Pizza");
+        }
+
+        [HttpGet]
         public IActionResult GetModalPizzaDetail(long id)
         {
 

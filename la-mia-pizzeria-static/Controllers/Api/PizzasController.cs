@@ -164,5 +164,33 @@ namespace la_mia_pizzeria_static.Controllers.Api
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet]
+        public IActionResult GetCategoriesList()
+        {
+            List<Category> allCategories = _pizzaDatabase.Categories.ToList();
+            if (allCategories != null && allCategories.Count > 0)
+            {
+                return Ok(allCategories);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetIngredientsList()
+        {
+            List<Ingredient> allIngredients = _pizzaDatabase.Ingredients.ToList();
+            if (allIngredients != null && allIngredients.Count > 0)
+            {
+                return Ok(allIngredients);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
     }
 }
